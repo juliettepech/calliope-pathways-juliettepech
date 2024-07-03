@@ -15,7 +15,7 @@ As a user:
 
 ```shell
 mamba env create -f environment.yml
-mamba activate calliope-pathways
+mamba activate calliope-pathways-test
 ```
 
 As a developer on WINDOWS:

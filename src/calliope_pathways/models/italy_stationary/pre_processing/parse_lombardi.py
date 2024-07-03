@@ -7,12 +7,13 @@ import numpy as np
 import pandas as pd
 import requests
 from yaml import safe_load
+import os
 
 # TODO: this could be a yaml file + schema... although it may be too specific
 # -> Model setup -> User configurable
 # Years
-YEAR_STEP = 10
-YEARS = np.arange(2020, 2050+YEAR_STEP, YEAR_STEP)
+YEAR_STEP = 5
+YEARS = np.arange(2025, 2050+YEAR_STEP, YEAR_STEP)
 # Decommissioning (Randomized Weibull)
 SEED = 5555
 BETA_MIN = 3
@@ -51,6 +52,7 @@ TECH_GROUPING = {
     "oil": ["oil_&_other"],
     "geothermal": ["geothermal"],
     "coal": ["coal", "coal_usc"],
+    "nuclear": ["nuclear"],
 }
 # Spatial aggregation
 NODE_GROUPING = {
@@ -239,7 +241,7 @@ def parse_available_vintages(tech_yml_path: str, years: list, option: str = "cut
     tech_life_df = tech_df[tech_df["parameters"].isin(["lifetime"])].set_index("techs")
 
     year_pairs = [(v, y) for y in years for v in years if v >= y]
-    columns = pd.MultiIndex.from_tuples(year_pairs, names=["vintagesteps", "investsteps"])
+    columns = pd.MultiIndex.from_tuples(year_pairs, names=["investsteps", "vintagesteps"])
 
     vintages_df = pd.DataFrame(index=tech_life_df.index, columns=columns)
 
@@ -291,7 +293,13 @@ def main(test_figs=True):
 
     if test_figs:
         avail_ini_cap_df.loc[:, YEARS[0]:].T.plot(legend=False)
-        plt.savefig("outputs/test.png")
+        #plt.savefig("outputs/test.png")
+
+        results_dir =  'outputs/'
+        if not os.path.isdir(results_dir):
+            os.makedirs(results_dir)
+
+        plt.savefig(results_dir + "test.png")
 
 
 if __name__ == "__main__":

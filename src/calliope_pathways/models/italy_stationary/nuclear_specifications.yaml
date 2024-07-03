@@ -1,0 +1,46 @@
+constraints:
+  annual_capacity_factor_min:
+    description: >
+      Limit the lower bound of annual nuclear operation as a
+      fraction of annual operation at maximum capacity.
+    foreach: [nodes, techs, carriers]
+    #foreach: [nodes, techs, carriers, investsteps]
+    where: capacity_factor_min
+    equations:
+      - expression: >
+          sum(flow_out * timestep_weights, over=timesteps) >=
+          flow_cap * capacity_factor_min * $total_time
+    sub_expressions:
+      total_time: &total_time
+        - expression: sum(timestep_resolution * timestep_weights, over=timesteps)
+
+  annual_capacity_factor_max:
+    description: >
+      Limit the upper bound of annual nuclear operation as a
+      fraction of annual operation at maximum capacity.
+    foreach: [nodes, techs, carriers]
+    #foreach: [nodes, techs, carriers, investsteps]
+    where: capacity_factor_max
+    equations:
+      - expression: >
+          sum(flow_out * timestep_weights, over=timesteps) <=
+          flow_cap * capacity_factor_max * $total_time
+    sub_expressions:
+      total_time: *total_time
+
+  max_time_varying_flow_cap:
+    description: >
+      Limit flow out in each investstep according to a time varying fractional limit
+      that is multiplied by the technology flow cap. This limit is
+      introduced to take account of the time needed to build a nuclear power
+      plant in the context of reintroduction of nuclear power in Italy.
+    foreach: [investsteps]
+    #foreach: [techs, carriers, timesteps, investsteps]
+    where: flow_cap_max_relative
+    equations:
+      #- expression: >
+      #    flow_out <=
+      #    flow_cap_max_relative_per_ts * flow_cap * flow_out_parasitic_eff
+      - expression: >
+          sum(flow_out, over=[techs, nodes]) <=
+          flow_cap_max_relative * sum(flow_cap * flow_out_parasitic_eff, over=[techs, nodes])

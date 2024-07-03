@@ -1,0 +1,162 @@
+overrides:
+  nuclear_initial_plants_scenario:
+    config:
+      init:
+        add_math: [../../math/pathways.yaml, nuclear_specifications.yaml]
+
+    locations:
+      NORD:
+        techs:
+          nuclear:
+      CSUD:
+        techs:
+          nuclear:
+      ## 08-Emilia Romagna - Caorso power plant
+      #R8:
+      #  techs:
+      #    nuclear: 
+      #      flow_cap_initial: 0 #kW
+      ## 01-Piemonte - Enrico Fermi power plant
+      #R1:
+      #  techs:
+      #    nuclear: 
+      #      flow_cap_initial: 0 #kW
+      ## 14-Campania - Garigliano power plant
+      #R14:
+      #  techs:
+      #    nuclear: 
+      #      flow_cap_initial: 0 #kW
+      ## 12-Lazio - Latina power plant
+      #R12:
+      #  techs:
+      #    nuclear: 
+      #      flow_cap_initial: 0 #kW
+    
+    techs:
+      nuclear:
+        name: "Nuclear energy"
+        color: '#5691bf'
+        #color: '#4679a1'
+        base_tech: supply
+        inherit: cost_dim_setter
+        carrier_out: electricity
+        flow_cap_initial: 0 # kW
+        source_unit: per_cap
+        flow_out_eff: 0.37
+        
+        # The technology is not liekely to be available before 2035
+        flow_cap_max_relative: 
+          data: [0, 0, 1, 1, 1, 1]
+          index: [2025, 2030, 2035, 2040, 2045, 2050]
+          dims: investsteps
+
+        capacity_factor_min: 0.70
+        #capacity_factor_min: 
+        #  data: [0.70, 0.70, 0.70, 0.70, 0.70, 0.70]
+        #  index: [2025, 2030, 2035, 2040, 2045, 2050]
+        #  dims: investsteps
+        capacity_factor_max: 0.90
+        #capacity_factor_max: 
+        #  data: [0.90, 0.90, 0.90, 0.90, 0.90, 0.90]
+        #  index: [2025, 2030, 2035, 2040, 2045, 2050]
+        #  dims: investsteps
+        lifetime: 50
+
+        # CAPEX
+        cost_flow_cap.data: 5200 # EUR2010/kW
+        # OPEX
+        cost_om_annual.data: 75.65 # EUR2010/kW/yr
+        # Nuclear fuel cost
+        cost_flow_in.data: 0.00816 # EUR2010/kWh
+
+  emissions:
+    # model.yaml
+    config:
+      init:
+        add_math: [../../math/pathways.yaml, math.yaml]
+
+    parameters:
+      objective_cost_weights:
+        data: [1,0]
+        index: [monetary, emissions]
+        dims: costs
+      #emissions_cap:
+          #data: [40000, 30000, 10000, 9000, 5000]
+          #index: [2030, 2035, 2040, 2045, 2050]
+          # Scenario 1
+          #data: [80.55e9, 56.88e9, 24.54e9, 6.92e9, 1.64e9, 0] # kgCO2
+          #index: [2025, 2030, 2035, 2040, 2045, 2050]
+          #dims: investsteps
+        
+    # techs.yaml
+    techs: 
+      waste:
+        cost_flow_in:
+          data: 
+            - -0.1305 # EUR2010/kWh
+            - 0.32    # kgCO2/kWh
+          index: [monetary, emissions]
+      bioenergy:
+        cost_flow_in:
+          data: 
+            - 0.1367 # EUR2010/kWh
+            - 0.29    # kgCO2/kWh
+          index: [monetary, emissions]
+      oil:
+        cost_flow_in:
+          data:
+            - 0.01 # EUR2010/kWh
+            - 0.24 # kgCO2/kWh
+          index: [monetary, emissions]
+      coal: 
+        cost_flow_in:
+          data: 
+            - 0.00946 # EUR2010/kWh
+            - 0.33    # kgCO2/kWh
+          index: [monetary, emissions]
+      ccgt: 
+        cost_flow_in:
+          data:
+            - 0.0291 # EUR2010/kWh
+            - 0.18   # kgCO2/kWh
+          index: [monetary, emissions]
+  
+  # Scenario 1
+  emissions_scenario_1:
+    parameters:
+      emissions_cap:
+          data: [80.55e9, 56.88e9, 24.54e9, 6.92e9, 1.64e9, 0] # kgCO2
+          index: [2025, 2030, 2035, 2040, 2045, 2050]
+          dims: investsteps
+  
+  # Scenario 2
+  emissions_scenario_2:
+    parameters:
+      emissions_cap:
+          data: [76.92e9, 44.24e9, 14.01e9, 3.13e9, 0.63e9, 0] # kgCO2
+          index: [2025, 2030, 2035, 2040, 2045, 2050]
+          dims: investsteps
+
+  # Scenario 3
+  emissions_scenario_3:
+    parameters:
+      emissions_cap:
+          data: [71.67e9, 31.60e9, 7.49e9, 1.39e9, 0.24e9, 0] # kgCO2
+          index: [2025, 2030, 2035, 2040, 2045, 2050]
+          dims: investsteps
+  
+  # Scenario 4
+  emissions_scenario_4:
+    parameters:
+      emissions_cap:
+          data: [64.12e9, 18.96e9, 3.06e9, 0.42e9, 0.06e9, 0] # kgCO2
+          index: [2025, 2030, 2035, 2040, 2045, 2050]
+          dims: investsteps
+  
+  # Scenario 5
+  emissions_scenario_5:
+    parameters:
+      emissions_cap:
+          data: [54.53e9, 6.32e9, 0.38e9, 0.02e9, 0, 0] # kgCO2
+          index: [2025, 2030, 2035, 2040, 2045, 2050]
+          dims: investsteps

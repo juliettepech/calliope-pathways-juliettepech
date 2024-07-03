@@ -16,3 +16,5 @@ pyyaml
 pycountry == 22.3.5
 pint-pandas
 powerplantmatching == 0.5.14
+matplotlib 
+pandas

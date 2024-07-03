@@ -2,8 +2,11 @@
 import:
   - "model_config/techs.yaml" # This file specifies the model's technologies
   - "model_config/locations.yaml" # This file specifies the model's nodes
-  # - "scenarios.yaml" # Scenario and override group definitions
+  - "scenarios.yaml" # Scenario and override group definitions
 
+scenarios:
+  scenario_emissions: ["emissions", "emissions_scenario_1"]
+  scenario_nuclear: ["nuclear_initial_plants_scenario"]
 
 # Model configuration: all settings that affect the built model
 config:
@@ -41,8 +44,10 @@ parameters:
   # `bigM` sets the scale of unmet demand, which cannot be too high, otherwise the optimisation will not converge
   bigM: 1e6
   investstep_resolution:
-    data: 10
-    index: [2020, 2030, 2040, 2050]
+    #data: 10
+    data: 21
+    #index: [2020, 2030, 2040, 2050]
+    index: [2025, 2030, 2035, 2040, 2045, 2050]
     dims: investsteps
 
 data_sources:
@@ -71,7 +76,8 @@ data_sources:
       parameters: available_initial_cap
 
   available_initial_cap_transmission:
-    source: data_sources/investstep_series/available_initial_cap_transmission.csv
+    #source: data_sources/investstep_series/available_initial_cap_transmission.csv
+    source: data_sources/investstep_series/available_initial_cap_transmission_5_year_step.csv
     rows: [techs]
     columns: investsteps
     add_dimensions:
@@ -80,14 +86,16 @@ data_sources:
   vintage_availability_techs:
     source: data_sources/investstep_series/available_vintages_techs.csv
     rows: techs
-    columns: [vintagesteps, investsteps]
+    columns: [investsteps, vintagesteps]
     add_dimensions:
       parameters: available_vintages
 
   vintage_availability_transmission:
-    source: data_sources/investstep_series/available_vintages_transmission.csv
+    #source: data_sources/investstep_series/available_vintages_transmission.csv
+    source: data_sources/investstep_series/available_vintages_transmission_5_year_step.csv
     rows: techs
-    columns: [vintagesteps, investsteps]
+    #columns: [vintagesteps, investsteps]
+    columns: [investsteps, vintagesteps]
     add_dimensions:
       parameters: available_vintages
 
