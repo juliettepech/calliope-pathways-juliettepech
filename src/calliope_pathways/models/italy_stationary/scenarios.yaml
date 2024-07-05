@@ -42,13 +42,13 @@ overrides:
         carrier_out: electricity
         flow_cap_initial: 0 # kW
         source_unit: per_cap
-        flow_out_eff: 0.37
+        flow_out_eff: 0.35
         
         # The technology is not liekely to be available before 2035
-        flow_cap_max_relative: 
-          data: [0, 0, 1, 1, 1, 1]
+        flow_cap_new_max: 
+          data: [0, 0, .inf, .inf, .inf, .inf]
           index: [2025, 2030, 2035, 2040, 2045, 2050]
-          dims: investsteps
+          dims: vintagesteps
 
         capacity_factor_min: 0.70
         #capacity_factor_min: 
