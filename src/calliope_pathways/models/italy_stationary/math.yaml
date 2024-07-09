@@ -1,8 +1,0 @@
-constraints:
-  emissions_limits:
-    description: >
-      Limit total emissions per investment step.
-    foreach: [investsteps]
-    where: emissions_cap
-    equations:
-      - expression: sum(cost[costs=emissions], over=[techs, nodes]) <= emissions_cap
