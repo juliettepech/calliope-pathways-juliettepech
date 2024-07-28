@@ -5,8 +5,8 @@ import:
   - "scenarios.yaml" # Scenario and override group definitions
 
 scenarios:
-  scenario_emissions: ["emissions", "emissions_scenario_1"]
-  scenario_nuclear: ["nuclear_initial_plants_scenario"]
+  scenario_emissions: ["emissions", "emissions_scenario_1", "flow_cap_new_max_rate"]
+  scenario_nuclear: ["nuclear_initial_plants_scenario", "emissions", "emissions_scenario_5", "flow_cap_new_max_rate"]
 
 # Model configuration: all settings that affect the built model
 config:
@@ -15,8 +15,8 @@ config:
     # What version of Calliope this model is intended for
     calliope_version: 0.7.0
     # Activate pathways configuration
-    add_math: [../../math/pathways.yaml, math.yaml]
-    time_resample: "1m"
+    add_math: [../../math/pathways.yaml, math/math.yaml]
+    time_resample: "1d"
 
   build:
     ensure_feasibility: false # Switches on the "unmet demand" constraint

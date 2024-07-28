@@ -42,7 +42,13 @@ INPUT_FILES = {
         "locations": "https://raw.githubusercontent.com/FLomb/Calliope-Italy/power_to_heat/italy_20_regions_v.0.1_heat/calliope_model/model_config/locations.yaml"
     },
     "stationary": {
-        "techs": SRC_DIR / "model_configs" / "italy" / "model_config" / "techs.yaml"
+        "techs": SRC_DIR / "model_configs" / "italy" / "model_config" / "techs.yaml",
+        "overrides": SRC_DIR
+        / "model_configs"
+        / "italy"
+        / "data_sources"
+        / "investstep_series"
+        / "available_vintages_nuclear.csv",
     },
 }
 OUTPUT_FILES = {
@@ -362,6 +368,18 @@ def main(
         year_step=investstep_resolution,
         option="share",
     )
+    # Overrides
+    avail_vint_overrides_df = pd.read_csv(
+        INPUT_FILES["stationary"]["overrides"], index_col=0, header=[0, 1]
+    )
+    avail_vint_overrides_df.columns = avail_vint_overrides_df.columns.set_levels(
+        [
+            avail_vint_overrides_df.columns.levels[0].astype(int),
+            avail_vint_overrides_df.columns.levels[1].astype(int),
+        ]
+    )
+    avail_vint_df = pd.concat([avail_vint_df, avail_vint_overrides_df])
+
     avail_vint_df.to_csv(output_files["vintage_availability_techs"])
 
     avail_transmission = parse_transmission(years)

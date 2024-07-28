@@ -1,8 +1,8 @@
 overrides:
   nuclear_initial_plants_scenario:
-    config:
-      init:
-        add_math: [../../math/pathways.yaml, nuclear_specifications.yaml]
+    #config:
+    #  init:
+    #    add_math: [../../math/pathways.yaml, additional_math/nuclear_specifications.yaml]
 
     locations:
       NORD:
@@ -51,15 +51,7 @@ overrides:
           dims: vintagesteps
 
         capacity_factor_min: 0.70
-        #capacity_factor_min: 
-        #  data: [0.70, 0.70, 0.70, 0.70, 0.70, 0.70]
-        #  index: [2025, 2030, 2035, 2040, 2045, 2050]
-        #  dims: investsteps
         capacity_factor_max: 0.90
-        #capacity_factor_max: 
-        #  data: [0.90, 0.90, 0.90, 0.90, 0.90, 0.90]
-        #  index: [2025, 2030, 2035, 2040, 2045, 2050]
-        #  dims: investsteps
         lifetime: 50
 
         # CAPEX
@@ -73,20 +65,13 @@ overrides:
     # model.yaml
     config:
       init:
-        add_math: [../../math/pathways.yaml, math.yaml]
+        add_math: [../../math/pathways.yaml, additional_math/math.yaml, additional_math/math_emissions.yaml, additional_math/nuclear_specifications.yaml]
 
     parameters:
       objective_cost_weights:
         data: [1,0]
         index: [monetary, emissions]
         dims: costs
-      #emissions_cap:
-          #data: [40000, 30000, 10000, 9000, 5000]
-          #index: [2030, 2035, 2040, 2045, 2050]
-          # Scenario 1
-          #data: [80.55e9, 56.88e9, 24.54e9, 6.92e9, 1.64e9, 0] # kgCO2
-          #index: [2025, 2030, 2035, 2040, 2045, 2050]
-          #dims: investsteps
         
     # techs.yaml
     techs: 
@@ -120,6 +105,14 @@ overrides:
             - 0.0291 # EUR2010/kWh
             - 0.18   # kgCO2/kWh
           index: [monetary, emissions]
+  
+  # Scenario 0
+  emissions_scenario_0:
+    parameters:
+      emissions_cap:
+          data: [.inf, .inf, .inf, .inf, .inf, .inf] # kgCO2
+          index: [2025, 2030, 2035, 2040, 2045, 2050]
+          dims: investsteps
   
   # Scenario 1
   emissions_scenario_1:
@@ -160,6 +153,7 @@ overrides:
           data: [54.53e9, 6.32e9, 0.38e9, 0.02e9, 0, 0] # kgCO2
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           dims: investsteps
+          
   flow_cap_new_max_rate:
     techs: # Putting in some indicative values here - not based on any data source
       import_electricity:
@@ -169,12 +163,16 @@ overrides:
           dims: investsteps
       wind:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
-          data: [0.75, 0.75, 0.75, 1, 1, 1]
+          #data: [2, 1.5, 1.5, 1, 1, 1]
+          #data: [0.75, 1.5, 1.5, 1, 1, 1]
+          data: [1.75, 1.75, 1.75, 1.5, 1, 1]
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           dims: investsteps
       pv:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
-          data: [0.75, 0.75, 0.75, 1, 1, 1]
+          #data: [2, 1.5, 1.5, 1, 1, 1]
+          #data: [0.75, 1.5, 1.5, 1, 1, 1]
+          data: [1.75, 1.75, 1.75, 1.5, 1, 1]
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           dims: investsteps
       coal:
@@ -192,7 +190,6 @@ overrides:
           data: 1
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           dims: investsteps
-
 
 scenarios:
   dynamic: [flow_cap_new_max_rate]

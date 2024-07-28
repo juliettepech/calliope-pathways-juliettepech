@@ -1,11 +1,4 @@
 constraints:
-  emissions_limits:
-    description: >
-      Limit total emissions per investment step.
-    foreach: [investsteps]
-    where: emissions_cap
-    equations:
-      - expression: sum(cost[costs=emissions], over=[techs, nodes]) <= emissions_cap
   import_export_match:
     description: Import/export of electricity into/out of Italy should have the same capacity as they represent transmission lines
     foreach: [nodes, carriers, investsteps]
