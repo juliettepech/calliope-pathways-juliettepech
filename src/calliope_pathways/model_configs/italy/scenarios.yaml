@@ -63,9 +63,9 @@ overrides:
 
   emissions:
     # model.yaml
-    config:
-      init:
-        add_math: [../../math/pathways.yaml, additional_math/math.yaml, additional_math/math_emissions.yaml, additional_math/nuclear_specifications.yaml]
+    #config:
+    #  init:
+    #    add_math: [../../math/pathways.yaml, additional_math/math.yaml, additional_math/math_emissions.yaml, additional_math/nuclear_specifications.yaml]
 
     parameters:
       objective_cost_weights:
@@ -153,7 +153,51 @@ overrides:
           data: [54.53e9, 6.32e9, 0.38e9, 0.02e9, 0, 0] # kgCO2
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           dims: investsteps
-          
+
+  increasing_demand:
+    config:
+      init:
+        add_math: [../../math/pathways.yaml, additional_math/math.yaml, additional_math/math_emissions.yaml, additional_math/nuclear_specifications.yaml, additional_math/math_increasing_demand.yaml]
+        
+    techs:
+      demand_electricity_2015:
+        name: "Electricity demand in 2015"
+        color: "#072486"
+        base_tech: demand
+        carrier_in: electricity
+        flow_cap_initial: 1e12  # very large number - it doesn't actually matter what this technology has as a capacity.
+        available_initial_cap: 1  # always available throughout the investment steps
+        
+      demand_electricity_2050:
+        name: "Electricity demand in 2050"
+        color: "#072486"
+        base_tech: demand
+        carrier_in: electricity
+        flow_cap_initial: 1e12  # very large number - it doesn't actually matter what this technology has as a capacity.
+        available_initial_cap: 1  # always available throughout the investment steps
+
+    data_sources:
+      # Demand data 2015
+      electricity_demand_source_use_equals:
+        add_dimensions:
+          techs: demand_electricity_2015
+          parameters: sink_use_max
+
+      # Demand data 2050
+      electricity_demand_source_use_equals_2050:
+        source: data_sources/timestep_series/demand_2050_eff.csv
+        rows: timesteps
+        columns: [nodes]
+        add_dimensions:
+          techs: demand_electricity_2050
+          parameters: sink_use_max
+
+    parameters:
+      factor_demand_2015:
+        data: [0.9, 0.57, 0.22, 0.06, 0.01, 0]
+        index: [2025, 2030, 2035, 2040, 2045, 2050]
+        dims: investsteps
+
   flow_cap_new_max_rate:
     techs: # Putting in some indicative values here - not based on any data source
       import_electricity:

@@ -1,0 +1,21 @@
+constraints:
+  demand_min:
+    description: The electricity demand gradually increases to reach the 2050 electricity demand profile.
+    foreach: [nodes, carriers, timesteps, investsteps]
+    #foreach: [nodes, techs, carriers, investsteps]
+    #where: sink_use_equals_2050 AND sink_use_equals AND factor_demand_2015 AND base_tech=demand
+    #where: base_tech=demand
+    where: NOT sink_use_equals AND sink_use_max AND base_tech=demand
+    equations:
+    #- where: sink_use_equals AND sink_use_equals_2050
+      #expression: flow_in_inc_eff >= factor_demand_2015 * sink_use_equals * $sink_scaler - (1 - factor_demand_2015) * sink_use_equals_2050 * $sink_scaler
+      #- expression: sum(flow_in_inc_eff * timestep_weights, over=timesteps) >= factor_demand_2015 * sum(sink_use_equals * $sink_scaler * timestep_weights, over=timesteps) - (1 - factor_demand_2015) * sum(sink_use_equals_2050 * $sink_scaler * timestep_weights, over=timesteps)
+      - expression: sum(flow_in_inc_eff, over=techs) == factor_demand_2015 * sink_use_max[techs=demand_electricity_2015] + (1 - factor_demand_2015) * sink_use_max[techs=demand_electricity_2050]
+    #sub_expressions:
+    #  sink_scaler:
+    #  - where: sink_unit=per_area
+    #    expression: area_use
+    #  - where: sink_unit=per_cap
+    #    expression: sum(flow_cap, over=carriers)
+    #  - where: sink_unit=absolute
+    #    expression: '1'

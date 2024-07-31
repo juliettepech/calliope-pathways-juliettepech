@@ -6,7 +6,7 @@ import:
 
 scenarios:
   scenario_emissions: ["emissions", "emissions_scenario_1", "flow_cap_new_max_rate"]
-  scenario_nuclear: ["nuclear_initial_plants_scenario", "emissions", "emissions_scenario_5", "flow_cap_new_max_rate"]
+  scenario_nuclear: ["nuclear_initial_plants_scenario", "emissions", "emissions_scenario_5", "flow_cap_new_max_rate", "increasing_demand"]
 
 # Model configuration: all settings that affect the built model
 config:
@@ -15,7 +15,7 @@ config:
     # What version of Calliope this model is intended for
     calliope_version: 0.7.0
     # Activate pathways configuration
-    add_math: [../../math/pathways.yaml, math/math.yaml]
+    add_math: [../../math/pathways.yaml, additional_math/math.yaml]
     time_resample: "1d"
 
   build:
@@ -110,7 +110,10 @@ data_sources:
     source: data_sources/timestep_series/regional_demand_series.csv
     rows: timesteps
     columns: [license, reference, comment, nodes, techs, parameters]
-    drop: [license, reference, comment]
+    drop: [license, reference, comment, techs, parameters]
+    add_dimensions:
+      techs: demand_electricity
+      parameters: sink_use_equals
 
   # Import/export cost data
   international_electricity_prices:
