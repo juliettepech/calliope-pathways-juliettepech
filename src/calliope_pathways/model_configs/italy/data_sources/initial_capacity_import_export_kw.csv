@@ -1,5 +1,0 @@
-nodes,techs,parameters,values
-NORD,import_electricity,flow_cap_initial,8400000
-NORD,export_electricity,flow_cap_initial,8400000
-SUD,import_electricity,flow_cap_initial,500000
-SUD,export_electricity,flow_cap_initial,500000
