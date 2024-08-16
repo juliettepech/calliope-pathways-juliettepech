@@ -1,0 +1,19 @@
+constraints:
+  maximum_new_cap:
+    description: >
+      Limit the upper bound of new installed capacity.
+    foreach: [techs, carriers, vintagesteps]
+    where: flow_cap_new_max
+    equations:
+      - expression: >
+          sum(flow_cap_new, over=nodes) <= flow_cap_new_max
+
+
+  minimum_new_cap:
+    description: >
+      Limit the lower bound of new installed capacity.
+    foreach: [techs, carriers, vintagesteps]
+    where: flow_cap_new_min
+    equations:
+      - expression: >
+          sum(flow_cap_new, over=nodes) >= flow_cap_new_min

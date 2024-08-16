@@ -8,6 +8,15 @@ techs:
       Maximum amount of flow capacity of a specific technology vintage.
     x-unit: power.
 
+  flow_cap_new_min:
+    $ref: "#/$defs/TechParamNullNumber"
+    default: 0
+    x-type: float
+    title: Minimum new flow capacity.
+    description: >-
+      Minimum amount of flow capacity of a specific technology vintage.
+    x-unit: power.
+
   storage_cap_new_max:
     $ref: "#/$defs/TechParamNullNumber"
     default: .inf

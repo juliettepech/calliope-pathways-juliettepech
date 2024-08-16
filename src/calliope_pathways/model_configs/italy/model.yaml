@@ -5,8 +5,8 @@ import:
   - "scenarios.yaml" # Scenario and override group definitions
 
 scenarios:
-  scenario_emissions: ["emissions", "emissions_scenario_1", "flow_cap_new_max_rate"]
-  scenario_nuclear: ["nuclear_initial_plants_scenario", "emissions", "emissions_scenario_5", "flow_cap_new_max_rate", "increasing_demand"]
+  scenario_emissions: ["emissions", "emissions_scenario_1", "flow_cap_new_max_rate", "increasing_demand"]
+  scenario_nuclear: ["nuclear_initial_plants_scenario", "emissions", "emissions_scenario_5", "flow_cap_new_max_rate", "increasing_demand", "import_export"]
 
 # Model configuration: all settings that affect the built model
 config:
@@ -16,7 +16,7 @@ config:
     calliope_version: 0.7.0
     # Activate pathways configuration
     add_math: [../../math/pathways.yaml, additional_math/math.yaml]
-    time_resample: "1d"
+    time_resample: "1m"
 
   build:
     ensure_feasibility: false # Switches on the "unmet demand" constraint
@@ -74,8 +74,7 @@ data_sources:
       parameters: available_vintages
 
   vintage_availability_transmission:
-    #source: data_sources/investstep_series/available_vintages_transmission.csv
-    source: data_sources/investstep_series/available_vintages_transmission_5_year_step.csv
+    source: data_sources/investstep_series/available_vintages_transmission.csv
     rows: techs
     columns: [investsteps, vintagesteps]
     add_dimensions:

@@ -43,11 +43,14 @@ overrides:
         flow_cap_initial: 0 # kW
         source_unit: per_cap
         flow_out_eff: 0.35
+        flow_ramping: 0.04
         
         # The technology is not liekely to be available before 2035
         flow_cap_new_max: 
           data: [0, 0, .inf, .inf, .inf, .inf]
           index: [2025, 2030, 2035, 2040, 2045, 2050]
+          #data: [0, 0, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
           dims: vintagesteps
 
         capacity_factor_min: 0.70
@@ -136,6 +139,8 @@ overrides:
       emissions_cap:
           data: [71.67e9, 31.60e9, 7.49e9, 1.39e9, 0.24e9, 0] # kgCO2
           index: [2025, 2030, 2035, 2040, 2045, 2050]
+          #data: [71.67e9, 31.60e9, 7.49e9, 1.39e9, 0.24e9, 0, 0, 0, 0, 0]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
           dims: investsteps
   
   # Scenario 4
@@ -152,6 +157,8 @@ overrides:
       emissions_cap:
           data: [54.53e9, 6.32e9, 0.38e9, 0.02e9, 0, 0] # kgCO2
           index: [2025, 2030, 2035, 2040, 2045, 2050]
+          #data: [54.53e9, 6.32e9, 0.38e9, 0.02e9, 0, 0, 0, 0, 0, 0]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
           dims: investsteps
 
   increasing_demand:
@@ -167,6 +174,12 @@ overrides:
         carrier_in: electricity
         flow_cap_initial: 1e12  # very large number - it doesn't actually matter what this technology has as a capacity.
         available_initial_cap: 1  # always available throughout the investment steps
+        demand_factor:
+          data: [0.9, 0.57, 0.22, 0.06, 0.01, 0]
+          index: [2025, 2030, 2035, 2040, 2045, 2050]
+          #data: [0.9, 0.57, 0.22, 0.06, 0.01, 0, 0, 0, 0, 0]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
+          dims: investsteps
         
       demand_electricity_2050:
         name: "Electricity demand in 2050"
@@ -175,13 +188,19 @@ overrides:
         carrier_in: electricity
         flow_cap_initial: 1e12  # very large number - it doesn't actually matter what this technology has as a capacity.
         available_initial_cap: 1  # always available throughout the investment steps
+        demand_factor:
+          data: [0.1, 0.43, 0.78, 0.94, 0.99, 1]
+          index: [2025, 2030, 2035, 2040, 2045, 2050]
+          #data: [0.1, 0.43, 0.78, 0.94, 0.99, 1, 1, 1, 1, 1]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
+          dims: investsteps
 
     data_sources:
       # Demand data 2015
       electricity_demand_source_use_equals:
         add_dimensions:
           techs: demand_electricity_2015
-          parameters: sink_use_max
+          parameters: sink_use_equals
 
       # Demand data 2050
       electricity_demand_source_use_equals_2050:
@@ -190,49 +209,113 @@ overrides:
         columns: [nodes]
         add_dimensions:
           techs: demand_electricity_2050
-          parameters: sink_use_max
+          parameters: sink_use_equals
 
-    parameters:
-      factor_demand_2015:
-        data: [0.9, 0.57, 0.22, 0.06, 0.01, 0]
-        index: [2025, 2030, 2035, 2040, 2045, 2050]
-        dims: investsteps
+  import_export:
+    #config:
+    #  init:
+    #    add_math: [../../math/pathways.yaml, additional_math/math.yaml, additional_math/math_emissions.yaml, additional_math/nuclear_specifications.yaml, additional_math/math_increasing_demand.yaml, additional_math/math_import_export.yaml]
+    
+    data_sources:
+      # Import/export initial capacities data
+      initial_tech_import_export:
+        source: data_sources/initial_capacity_import_export_kw.csv
+        rows: [nodes, techs, parameters]
+        columns: [values]
+        drop: values
+
+      available_initial_cap_import_export:
+        source: data_sources/investstep_series/available_initial_cap_import_export.csv
+        rows: [nodes, techs]
+        columns: investsteps
+        add_dimensions:
+          parameters: available_initial_cap
+
+      available_vintages_import_export:
+        source: data_sources/investstep_series/available_vintages_import_export.csv
+        rows: techs
+        columns: [investsteps, vintagesteps]
+        add_dimensions:
+          parameters: available_vintages
+      
+      data_flow_cap_new_max: 
+        source: data_sources/flow_cap_new_bounding_max.csv
+        rows: [nodes,techs,parameters,vintagesteps]
+        columns: [values]
+        drop: values
+
+      data_flow_cap_new_min: 
+        source: data_sources/flow_cap_new_bounding_min.csv
+        rows: [nodes,techs,parameters,vintagesteps]
+        columns: [values]
+        drop: values
+
+    techs:
+      import_electricity:
+        flow_cap_new_max: 
+        flow_cap_new_min:
+        #flow_cap_new_max: 
+        #  data: [2940000, 4760000, 500000, 0, 1000000, 0] #kW
+        #  index: [2025, 2030, 2035, 2040, 2045, 2050]
+        #  dims: vintagesteps
+        #flow_cap_new_min: 
+        #  data: [2940000, 4760000, 500000, 0, 1000000, 0]
+        #  index: [2025, 2030, 2035, 2040, 2045, 2050]
+        #  dims: vintagesteps
 
   flow_cap_new_max_rate:
     techs: # Putting in some indicative values here - not based on any data source
-      import_electricity:
-        flow_cap_new_max_rate:
-          data: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
-          index: [2025, 2030, 2035, 2040, 2045, 2050]
-          dims: investsteps
+      #import_electricity:
+      #  flow_cap_new_max_rate:
+      #    data: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+      #    index: [2025, 2030, 2035, 2040, 2045, 2050]
+          #data: 0.5
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
+      #    dims: investsteps
       wind:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
           #data: [2, 1.5, 1.5, 1, 1, 1]
           #data: [0.75, 1.5, 1.5, 1, 1, 1]
-          data: [1.75, 1.75, 1.75, 1.5, 1, 1]
+          data: [3, 3, 2, 1, 1, 1]
+          #data: [3, 3, 3, 2, 2, 1]
           index: [2025, 2030, 2035, 2040, 2045, 2050]
+          #data: [3, 3, 3, 2, 2, 1, 1, 1, 1, 1]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
           dims: investsteps
       pv:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
           #data: [2, 1.5, 1.5, 1, 1, 1]
           #data: [0.75, 1.5, 1.5, 1, 1, 1]
-          data: [1.75, 1.75, 1.75, 1.5, 1, 1]
+          data: [3, 3, 2, 1, 1, 1]
+          #data: [3, 3, 3, 2, 2, 1]
           index: [2025, 2030, 2035, 2040, 2045, 2050]
+          #data: [3, 3, 3, 2, 2, 1, 1, 1, 1, 1]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
+          dims: investsteps
+      nuclear:
+        flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
+          data: [0, 0, .inf, 2, 2, 2]
+          index: [2025, 2030, 2035, 2040, 2045, 2050]
+          #data: [0, 0, .inf, 2, 2, 2, 2, 2, 2, 2]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
           dims: investsteps
       coal:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
           data: 1
           index: [2025, 2030, 2035, 2040, 2045, 2050]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
           dims: investsteps
       ccgt:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
           data: 1
           index: [2025, 2030, 2035, 2040, 2045, 2050]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
           dims: investsteps
       oil:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
           data: 1
           index: [2025, 2030, 2035, 2040, 2045, 2050]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
           dims: investsteps
 
 scenarios:

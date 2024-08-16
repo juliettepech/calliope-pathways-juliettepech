@@ -268,7 +268,7 @@ variables:
     where: flow_cap
     foreach: [nodes, techs, carriers, vintagesteps]
     bounds:
-      min: 0
+      min: flow_cap_new_min
       max: flow_cap_new_max
 
   storage_cap_new:
