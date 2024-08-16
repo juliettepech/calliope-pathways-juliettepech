@@ -1,37 +1,13 @@
 overrides:
   nuclear_initial_plants_scenario:
-    #config:
-    #  init:
-    #    add_math: [../../math/pathways.yaml, additional_math/nuclear_specifications.yaml]
-
-    locations:
+    nodes:
       NORD:
         techs:
           nuclear:
       CSUD:
         techs:
           nuclear:
-      ## 08-Emilia Romagna - Caorso power plant
-      #R8:
-      #  techs:
-      #    nuclear: 
-      #      flow_cap_initial: 0 #kW
-      ## 01-Piemonte - Enrico Fermi power plant
-      #R1:
-      #  techs:
-      #    nuclear: 
-      #      flow_cap_initial: 0 #kW
-      ## 14-Campania - Garigliano power plant
-      #R14:
-      #  techs:
-      #    nuclear: 
-      #      flow_cap_initial: 0 #kW
-      ## 12-Lazio - Latina power plant
-      #R12:
-      #  techs:
-      #    nuclear: 
-      #      flow_cap_initial: 0 #kW
-    
+
     techs:
       nuclear:
         name: "Nuclear energy"
@@ -44,9 +20,9 @@ overrides:
         source_unit: per_cap
         flow_out_eff: 0.35
         flow_ramping: 0.04
-        
-        # The technology is not liekely to be available before 2035
-        flow_cap_new_max: 
+
+        # The technology is not likely to be available before 2035
+        flow_cap_new_max:
           data: [0, 0, .inf, .inf, .inf, .inf]
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           #data: [0, 0, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf]
@@ -75,18 +51,18 @@ overrides:
         data: [1,0]
         index: [monetary, emissions]
         dims: costs
-        
+
     # techs.yaml
-    techs: 
+    techs:
       waste:
         cost_flow_in:
-          data: 
+          data:
             - -0.1305 # EUR2010/kWh
             - 0.32    # kgCO2/kWh
           index: [monetary, emissions]
       bioenergy:
         cost_flow_in:
-          data: 
+          data:
             - 0.1367 # EUR2010/kWh
             - 0.29    # kgCO2/kWh
           index: [monetary, emissions]
@@ -96,19 +72,19 @@ overrides:
             - 0.01 # EUR2010/kWh
             - 0.24 # kgCO2/kWh
           index: [monetary, emissions]
-      coal: 
+      coal:
         cost_flow_in:
-          data: 
+          data:
             - 0.00946 # EUR2010/kWh
             - 0.33    # kgCO2/kWh
           index: [monetary, emissions]
-      ccgt: 
+      ccgt:
         cost_flow_in:
           data:
             - 0.0291 # EUR2010/kWh
             - 0.18   # kgCO2/kWh
           index: [monetary, emissions]
-  
+
   # Scenario 0
   emissions_scenario_0:
     parameters:
@@ -116,7 +92,7 @@ overrides:
           data: [.inf, .inf, .inf, .inf, .inf, .inf] # kgCO2
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           dims: investsteps
-  
+
   # Scenario 1
   emissions_scenario_1:
     parameters:
@@ -124,7 +100,7 @@ overrides:
           data: [80.55e9, 56.88e9, 24.54e9, 6.92e9, 1.64e9, 0] # kgCO2
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           dims: investsteps
-  
+
   # Scenario 2
   emissions_scenario_2:
     parameters:
@@ -142,7 +118,7 @@ overrides:
           #data: [71.67e9, 31.60e9, 7.49e9, 1.39e9, 0.24e9, 0, 0, 0, 0, 0]
           #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
           dims: investsteps
-  
+
   # Scenario 4
   emissions_scenario_4:
     parameters:
@@ -150,7 +126,7 @@ overrides:
           data: [64.12e9, 18.96e9, 3.06e9, 0.42e9, 0.06e9, 0] # kgCO2
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           dims: investsteps
-  
+
   # Scenario 5
   emissions_scenario_5:
     parameters:
@@ -165,7 +141,7 @@ overrides:
     config:
       init:
         add_math: [../../math/pathways.yaml, additional_math/math.yaml, additional_math/math_emissions.yaml, additional_math/nuclear_specifications.yaml, additional_math/math_increasing_demand.yaml]
-        
+
     techs:
       demand_electricity_2015:
         name: "Electricity demand in 2015"
@@ -180,7 +156,7 @@ overrides:
           #data: [0.9, 0.57, 0.22, 0.06, 0.01, 0, 0, 0, 0, 0]
           #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
           dims: investsteps
-        
+
       demand_electricity_2050:
         name: "Electricity demand in 2050"
         color: "#072486"
@@ -212,66 +188,63 @@ overrides:
           parameters: sink_use_equals
 
   import_export:
-    #config:
-    #  init:
-    #    add_math: [../../math/pathways.yaml, additional_math/math.yaml, additional_math/math_emissions.yaml, additional_math/nuclear_specifications.yaml, additional_math/math_increasing_demand.yaml, additional_math/math_import_export.yaml]
-    
-    data_sources:
-      # Import/export initial capacities data
-      initial_tech_import_export:
-        source: data_sources/initial_capacity_import_export_kw.csv
-        rows: [nodes, techs, parameters]
-        columns: [values]
-        drop: values
+    nodes:
+      NORD.techs:
+        import_electricity:
+          flow_cap_initial: 8400000
+        export_electricity:
+          flow_cap_initial: 8400000
+      CNOR.techs:
+        import_electricity:
+        export_electricity:
+      CSUD.techs:
+        import_electricity:
+        export_electricity:
+      SUD.techs:
+        import_electricity:
+          flow_cap_initial: 500000
+        export_electricity:
+          flow_cap_initial: 500000
+      SICI.techs:
+        import_electricity:
+        export_electricity:
 
+    data_sources:
       available_initial_cap_import_export:
         source: data_sources/investstep_series/available_initial_cap_import_export.csv
-        rows: [nodes, techs]
+        rows: [nodes]
         columns: investsteps
         add_dimensions:
           parameters: available_initial_cap
+          techs: [import_electricity, export_electricity]
 
       available_vintages_import_export:
         source: data_sources/investstep_series/available_vintages_import_export.csv
-        rows: techs
         columns: [investsteps, vintagesteps]
+        rows: [parameters]
         add_dimensions:
-          parameters: available_vintages
-      
-      data_flow_cap_new_max: 
-        source: data_sources/flow_cap_new_bounding_max.csv
-        rows: [nodes,techs,parameters,vintagesteps]
-        columns: [values]
-        drop: values
+          techs: [import_electricity, export_electricity]
 
-      data_flow_cap_new_min: 
-        source: data_sources/flow_cap_new_bounding_min.csv
-        rows: [nodes,techs,parameters,vintagesteps]
-        columns: [values]
-        drop: values
+      data_flow_cap_new_max:
+        source: data_sources/flow_cap_new_bounding.csv
+        rows: [nodes]
+        columns: [vintagesteps]
+        add_dimensions:
+          techs: [import_electricity]
+          parameters: [flow_cap_new_min, flow_cap_new_max]
 
-    techs:
-      import_electricity:
-        flow_cap_new_max: 
-        flow_cap_new_min:
-        #flow_cap_new_max: 
-        #  data: [2940000, 4760000, 500000, 0, 1000000, 0] #kW
-        #  index: [2025, 2030, 2035, 2040, 2045, 2050]
-        #  dims: vintagesteps
-        #flow_cap_new_min: 
-        #  data: [2940000, 4760000, 500000, 0, 1000000, 0]
-        #  index: [2025, 2030, 2035, 2040, 2045, 2050]
-        #  dims: vintagesteps
+      international_electricity_prices:
+        source: data_sources/timestep_series/electricity_price_series.csv
+        rows: timesteps
+        columns: [license, reference, comment, techs]
+        drop: [license, reference, comment]
+        add_dimensions:
+          costs: monetary
+          parameters: cost_flow_out
 
   flow_cap_new_max_rate:
     techs: # Putting in some indicative values here - not based on any data source
-      #import_electricity:
-      #  flow_cap_new_max_rate:
-      #    data: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
-      #    index: [2025, 2030, 2035, 2040, 2045, 2050]
-          #data: 0.5
-          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
-      #    dims: investsteps
+
       wind:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
           #data: [2, 1.5, 1.5, 1, 1, 1]
@@ -317,6 +290,3 @@ overrides:
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
           dims: investsteps
-
-scenarios:
-  dynamic: [flow_cap_new_max_rate]

@@ -113,14 +113,3 @@ data_sources:
     add_dimensions:
       techs: demand_electricity
       parameters: sink_use_equals
-
-  # Import/export cost data
-  international_electricity_prices:
-    source: data_sources/timestep_series/electricity_price_series.csv
-    rows: timesteps
-    columns: [license, reference, comment, techs]
-    drop: [license, reference, comment]
-    add_dimensions:
-      costs: monetary
-      parameters: cost_flow_out
-      nodes: [NORD, SUD]

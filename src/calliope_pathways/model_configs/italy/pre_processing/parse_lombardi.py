@@ -71,8 +71,6 @@ TECH_GROUPING = {
     "oil": ["oil_&_other"],
     "geothermal": ["geothermal"],
     "coal": ["coal", "coal_usc"],
-    "import_electricity": ["import_electricity"],
-    "export_electricity": ["export_electricity"],
 }
 # Spatial aggregation
 NODE_GROUPING = {
@@ -340,7 +338,6 @@ def main(
     data_dir: str | Path = SRC_DIR / "model_configs" / "italy" / "data_sources",
     test_figs=False,
 ) -> dict:
-
     data_dir = Path(data_dir)
     investstep_dir = data_dir / "investstep_series"
     investstep_dir.mkdir(exist_ok=True)
