@@ -84,6 +84,16 @@ overrides:
             - 0.0291 # EUR2010/kWh
             - 0.18   # kgCO2/kWh
           index: [monetary, emissions]
+      import_electricity:
+        cost_flow_in:
+          data: 0.092   # kgCO2/kWh
+          index: [emissions]
+          dims: costs
+      #export_electricity:
+      #  cost_flow_in:
+      #    data: -0.271   # kgCO2/kWh
+      #    index: [emissions]
+      #    dims: costs
 
   # Scenario 0
   emissions_scenario_0:
@@ -248,7 +258,7 @@ overrides:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
           #data: [2, 1.5, 1.5, 1, 1, 1]
           #data: [0.75, 1.5, 1.5, 1, 1, 1]
-          data: [3, 3, 2, 1, 1, 1]
+          data: 3
           #data: [3, 3, 3, 2, 2, 1]
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           #data: [3, 3, 3, 2, 2, 1, 1, 1, 1, 1]
@@ -258,7 +268,7 @@ overrides:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
           #data: [2, 1.5, 1.5, 1, 1, 1]
           #data: [0.75, 1.5, 1.5, 1, 1, 1]
-          data: [3, 3, 2, 1, 1, 1]
+          data: 3
           #data: [3, 3, 3, 2, 2, 1]
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           #data: [3, 3, 3, 2, 2, 1, 1, 1, 1, 1]
