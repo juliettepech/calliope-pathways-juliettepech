@@ -27,6 +27,10 @@ overrides:
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           #data: [0, 0, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf]
           #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
+          #data: [0, 0, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090]
+          #data: [0, 0, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf, .inf]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090, 2095, 2100]
           dims: vintagesteps
 
         capacity_factor_min: 0.70
@@ -34,7 +38,8 @@ overrides:
         lifetime: 50
 
         # CAPEX
-        cost_flow_cap.data: 5200 # EUR2010/kW
+        #cost_flow_cap.data: 5200 # EUR2010/kW
+        cost_flow_cap.data: 7800 # EUR2010/kW
         # OPEX
         cost_om_annual.data: 75.65 # EUR2010/kW/yr
         # Nuclear fuel cost
@@ -84,11 +89,22 @@ overrides:
             - 0.0291 # EUR2010/kWh
             - 0.18   # kgCO2/kWh
           index: [monetary, emissions]
-      import_electricity:
-        cost_flow_in:
-          data: 0.092   # kgCO2/kWh
-          index: [emissions]
-          dims: costs
+      #import_electricity: # DOESN'T WORK
+      #  cost_flow_out:
+      #    data: [0.086, 0.06, 0.026, 0.007, 0.002, 0]  # kgCO2/kWh
+      #    index: [2025, 2030, 2035, 2040, 2045, 2050] 
+      #    dims: investsteps
+      #    costs: [emissions]
+    
+    data_sources:
+      import_electricity_emission_factor:
+        source: data_sources/investstep_series/emission_factor_imports.csv
+        rows: [techs]
+        columns: investsteps
+        add_dimensions:
+          parameters: cost_flow_out
+          costs: [emissions]
+
       #export_electricity:
       #  cost_flow_in:
       #    data: -0.271   # kgCO2/kWh
@@ -127,6 +143,10 @@ overrides:
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           #data: [71.67e9, 31.60e9, 7.49e9, 1.39e9, 0.24e9, 0, 0, 0, 0, 0]
           #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
+          #data: [71.67e9, 31.60e9, 7.49e9, 1.39e9, 0.24e9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090, 2095, 2100]
+          #data: [71.67e9, 31.60e9, 7.49e9, 1.39e9, 0.24e9, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090]
           dims: investsteps
 
   # Scenario 4
@@ -153,6 +173,8 @@ overrides:
         add_math: [../../math/pathways.yaml, additional_math/math.yaml, additional_math/math_emissions.yaml, additional_math/nuclear_specifications.yaml, additional_math/math_increasing_demand.yaml]
 
     techs:
+      demand_electricity.active: false
+
       demand_electricity_2015:
         name: "Electricity demand in 2015"
         color: "#072486"
@@ -165,6 +187,10 @@ overrides:
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           #data: [0.9, 0.57, 0.22, 0.06, 0.01, 0, 0, 0, 0, 0]
           #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
+          #data: [0.9, 0.57, 0.22, 0.06, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090]
+          #data: [0.9, 0.57, 0.22, 0.06, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090, 2095, 2100]
           dims: investsteps
 
       demand_electricity_2050:
@@ -179,6 +205,10 @@ overrides:
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           #data: [0.1, 0.43, 0.78, 0.94, 0.99, 1, 1, 1, 1, 1]
           #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
+          #data: [0.1, 0.43, 0.78, 0.94, 0.99, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090]
+          #data: [0.1, 0.43, 0.78, 0.94, 0.99, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090, 2095, 2100]
           dims: investsteps
 
     data_sources:
@@ -258,21 +288,25 @@ overrides:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
           #data: [2, 1.5, 1.5, 1, 1, 1]
           #data: [0.75, 1.5, 1.5, 1, 1, 1]
-          data: 3
+          data: 2
           #data: [3, 3, 3, 2, 2, 1]
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           #data: [3, 3, 3, 2, 2, 1, 1, 1, 1, 1]
           #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090, 2095, 2100]
           dims: investsteps
       pv:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
           #data: [2, 1.5, 1.5, 1, 1, 1]
           #data: [0.75, 1.5, 1.5, 1, 1, 1]
-          data: 3
+          data: 2
           #data: [3, 3, 3, 2, 2, 1]
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           #data: [3, 3, 3, 2, 2, 1, 1, 1, 1, 1]
           #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090, 2095, 2100]
           dims: investsteps
       nuclear:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
@@ -280,22 +314,32 @@ overrides:
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           #data: [0, 0, .inf, 2, 2, 2, 2, 2, 2, 2]
           #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
+          #data: [0, 0, .inf, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090]
+          #data: [0, 0, .inf, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090, 2095, 2100]
           dims: investsteps
       coal:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
           data: 1
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090, 2095, 2100]
           dims: investsteps
       ccgt:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
           data: 1
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090, 2095, 2100]
           dims: investsteps
       oil:
         flow_cap_new_max_rate:  # Putting in some indicative values here - not based on any data source
           data: 1
           index: [2025, 2030, 2035, 2040, 2045, 2050]
           #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090]
+          #index: [2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075, 2080, 2085, 2090, 2095, 2100]
           dims: investsteps
